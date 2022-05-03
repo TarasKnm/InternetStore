@@ -8,8 +8,11 @@ store.Base.metadata.create_all(bind=engine)
 good.Base.metadata.create_all(bind=engine)
 order.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
 
-@app.get("/")
-def smth():
-    return "hello"
+def get_application() -> FastAPI:
+    application = FastAPI()
+
+    return application
+
+
+app = get_application()

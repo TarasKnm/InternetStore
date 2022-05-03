@@ -1,16 +1,12 @@
 from sqlalchemy import Column, Integer, ForeignKey, VARCHAR, DateTime, Boolean
 
-from ..db_setup import Base
+from ..db.base_class import Base
 
 class UserStatus(Base):
-    __tablename__ = "user_statuses"
-
     id = Column(Integer, primary_key=True)
     name = Column(VARCHAR(45))
 
 class User(Base):
-    __tablename__ = "users"
-
     id = Column(Integer, primary_key=True)
     username = Column(VARCHAR(45))
     firstname = Column(VARCHAR(45))
