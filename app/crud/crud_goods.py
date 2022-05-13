@@ -1,4 +1,4 @@
 from app.crud.base import CRUDBase 
-from app.models.good import Good
+from app.models.product import Product
 
-goods = CRUDBase(Good)
+goods = CRUDBase(Product)

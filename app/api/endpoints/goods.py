@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.db.db_setup import Session, get_db
-from app.models.good import Good
+from app.models.product import Product
 from app.crud import crud_goods
 from app.schemas import goods_schema
 
