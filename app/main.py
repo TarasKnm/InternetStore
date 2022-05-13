@@ -1,18 +1,15 @@
 from fastapi import FastAPI
+import uvicorn
 
-from db.db_setup import engine
-from db.models import user, store, good, order
+from app.db.db_setup import engine
+from app.api.api import api_router
 
-user.Base.metadata.create_all(bind=engine)
-store.Base.metadata.create_all(bind=engine)
-good.Base.metadata.create_all(bind=engine)
-order.Base.metadata.create_all(bind=engine)
+# user.Base.metadata.create_all(bind=engine)
+# store.Base.metadata.create_all(bind=engine)
+# good.Base.metadata.create_all(bind=engine)
+# order.Base.metadata.create_all(bind=engine)
 
+app = FastAPI()
 
-def get_application() -> FastAPI:
-    application = FastAPI()
+app.include_router(api_router)
 
-    return application
-
-
-app = get_application()
