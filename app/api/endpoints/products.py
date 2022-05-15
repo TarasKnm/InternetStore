@@ -3,24 +3,24 @@ from sqlalchemy.orm import Session
 
 from app.db.db_setup import Session, get_db
 from app.models.product import Product
-from app.crud import crud_goods
-from app.schemas import goods_schema
+from app.crud import crud_products
+from app.schemas import products_schema
 
 router = APIRouter()
 
 @router.get('/')
-def get_goods():
+def get_products():
     pass
 
 @router.get('/{id}')
-def get_goods_by_id(id=id):
+def get_products_by_id(id=id):
     return id
 
-@router.post('/', response_model=goods_schema.GoodsBase)
-def add_goods(*,
+@router.post('/', response_model=products_schema.ProductsBase)
+def add_products(*,
               db:Session =  Depends(get_db),
-              goods: goods_schema.GoodsBase):
-    goods = crud_goods.goods.create(db=db,obj_in=goods)
+              goods: products_schema.ProductsBase):
+    goods = crud_products.goods.create(db=db,obj_in=goods)
     return goods
     
     
