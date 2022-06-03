@@ -1,6 +1,5 @@
-from pydantic import BaseModel
-
-class ProductsBase(BaseModel):
-    id: int
+from decimal import Decimal
+from app.schemas.base_schema import SchemaBase
+class ProductsBase(SchemaBase):
     name: str
-    price: float
+    price: Decimal

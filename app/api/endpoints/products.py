@@ -13,21 +13,28 @@ def get_products():
     pass
 
 @router.get('/{id}')
-def get_products_by_id(id=id):
-    return id
+def get_product_by_id(db:Session = Depends(get_db),
+                      id=id):
+    product = crud_products.products.get(db=db,id=id)
+    return product
 
 @router.post('/', response_model=products_schema.ProductsBase)
 def add_products(*,
               db:Session =  Depends(get_db),
-              goods: products_schema.ProductsBase):
-    goods = crud_products.goods.create(db=db,obj_in=goods)
-    return goods
+              products: products_schema.ProductsBase):
+    products = crud_products.products.create(db=db,obj_in=products)
+    return products
     
-    
+@router.get('')
+def get_all_products(db:Session =  Depends(get_db)):
+    products = crud_products.products.get_multi(db=db) 
+    return products
 @router.put('/{id}')
 def update_goods(id=id):
     pass
 
 @router.delete('/{id}')
-def delete_goods(id=id):
-    pass
+def delete_goods(db:Session = Depends(get_db),
+                      id=id):
+    product = crud_products.products.remove(db=db,id=id)
+    return product

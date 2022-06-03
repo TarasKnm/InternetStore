@@ -1,5 +1,6 @@
 from sqlalchemy import  Column, Integer, ForeignKey, VARCHAR,TIMESTAMP,Table
 from sqlalchemy.orm import relationship
+from .user import User
 
 from ..db.base_class import Base
 order_detail = Table('order_details', Base.metadata,
@@ -12,7 +13,10 @@ class Order(Base):
     
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    create_at = Column(TIMESTAMP)   
-    ship_address = Column(VARCHAR(100))
+    created_at = Column(TIMESTAMP)
+    city = Column(VARCHAR(45))
+    zip = Column(VARCHAR(45))
+    adress = Column(VARCHAR(45))
     products = relationship('Product', secondary=order_detail)
+    user = relationship('User')
     
