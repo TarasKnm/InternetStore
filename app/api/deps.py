@@ -14,17 +14,16 @@ from app.core import security
 from app.db.db_setup import Session, get_db
 
 reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"api/login/access-token"
+    tokenUrl="/login/login/access-token"
 )
 
-SECRET_KEY = secrets.token_urlsafe(32)
 
 def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
 ) -> user.User:
     try:
         payload = jwt.decode(
-            token, SECRET_KEY, algorithms=[security.ALGORITHM]
+            token, 'secret', algorithms=[security.ALGORITHM]
         )
         token_data = token_schema.TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):

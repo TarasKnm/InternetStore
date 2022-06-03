@@ -8,7 +8,6 @@ from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
 ALGORITHM = "HS256"
 
 
@@ -22,7 +21,7 @@ def create_access_token(
             minutes=30
         )
     to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, secrets.token_urlsafe(32), algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, "secret",algorithm=ALGORITHM)
     return encoded_jwt
 
 
