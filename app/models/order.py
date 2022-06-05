@@ -1,6 +1,5 @@
 from sqlalchemy import  Column, Integer, ForeignKey, VARCHAR,TIMESTAMP,Table
 from sqlalchemy.orm import relationship
-from .user import User
 
 from ..db.base_class import Base
 order_detail = Table('order_details', Base.metadata,
