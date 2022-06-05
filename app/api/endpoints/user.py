@@ -47,14 +47,20 @@ def create_user(
     user = crud_user.user.create(db, obj_in=user_in)
     return user
 
+@router.delete("/", response_model=user_schema.User)
+def delete_user_me(
+    *,
+    db: Session = Depends(get_db),
+    current_user: user.User = Depends(deps.get_current_active_user)) -> Any:
+    
+    user = crud_user.user.delete(db=db,username=current_user.username)
+    return user
 
-@router.put("/me", response_model=user_schema.User)
+@router.put("/", response_model=user_schema.User)
 def update_user_me(
     *,
     db: Session = Depends(get_db),
-    password: str = Body(None),
-    full_name: str = Body(None),
-    email: EmailStr = Body(None),
+    user: user_schema.UserUpdate,
     current_user: user.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
@@ -62,18 +68,20 @@ def update_user_me(
     """
     current_user_data = jsonable_encoder(current_user)
     user_in = user_schema.UserUpdate(**current_user_data)
-    if password is not None:
-        user_in.password = password
-    if full_name is not None:
-        user_in.full_name = full_name
-    if email is not None:
-        user_in.email = email
+    if user.email:
+        user_in.email = user.email
+    if user.firstname:
+        user_in.firstname = user.firstname
+    if user.lastname:
+        user_in.lastname = user.lastname
+    if user.phone:
+        user_in.phone = user.phone
     user = crud_user.user.update(db, db_obj=current_user, obj_in=user_in)
     return user
 
 
-@router.get("/me", response_model=user_schema.User)
-def read_user_me(
+@router.get("/profile", response_model=user_schema.User)
+def get_profile(
     db: Session = Depends(get_db),
     current_user: user.User = Depends(deps.get_current_active_user),
 ) -> Any:
@@ -83,7 +91,7 @@ def read_user_me(
     return current_user
 
 
-@router.post("/registration", response_model=user_schema.User)
+@router.post("/register", response_model=user_schema.User)
 def create_user_open(
     *,
     db: Session = Depends(deps.get_db),
@@ -91,7 +99,8 @@ def create_user_open(
     email: EmailStr = Body(...),
     firstname: str = Body(None),
     lastname: str = Body(None),
-    username: str = Body(None)
+    username: str = Body(None),
+    phone: str = Body(None)
 ) -> Any:
     """
     Create new user without the need to be logged in.
@@ -101,13 +110,13 @@ def create_user_open(
     #         status_code=403,
     #         detail="Open user registration is forbidden on this server",
     #     )
-    user = crud_user.user.get_by_email(db, email=email)
+    user = crud_user.user.get_by_username(db, username=username)
     if user:
         raise HTTPException(
             status_code=400,
             detail="The user with this username already exists in the system",
         )
-    user_in = user_schema.UserCreate(password=password, email=email, firstname=firstname,lastname=lastname,username=username)
+    user_in = user_schema.UserCreate(password=password, email=email, firstname=firstname,lastname=lastname,username=username,phone=phone)
     user = crud_user.user.create(db, obj_in=user_in)
     return user
 

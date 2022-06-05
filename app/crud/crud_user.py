@@ -22,6 +22,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             firstname=obj_in.firstname,
             lastname=obj_in.lastname,
             username=obj_in.username,
+            phone=obj_in.phone,
             is_superuser=obj_in.is_superuser,
         )
         db.add(db_obj)
@@ -36,12 +37,19 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             update_data = obj_in
         else:
             update_data = obj_in.dict(exclude_unset=True)
-        if update_data["password"]:
-            hashed_password = get_password_hash(update_data["password"])
-            del update_data["password"]
-            update_data["hashed_password"] = hashed_password
+        # if update_data["password"]:
+        #     hashed_password = get_password_hash(update_data["password"])
+        #     del update_data["password"]
+        #     update_data["hashed_password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
+    def delete(
+        self, db: Session, *, username: str):
+        db_obj = self.get_by_username(db=db,username=username)
+        db.delete(db_obj)
+        db.commit()
+        return db_obj
+    
     def authenticate(self, db: Session, *, username: str, password: str) -> Optional[User]:
         user = self.get_by_username(db, username=username)
         if not user:

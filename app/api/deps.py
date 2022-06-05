@@ -14,7 +14,7 @@ from app.core import security
 from app.db.db_setup import Session, get_db
 
 reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl="/login/login/access-token"
+    tokenUrl="/login"
 )
 
 
@@ -42,7 +42,6 @@ def get_current_active_user(
 ) -> user.User:
 
     return current_user
-
 
 def get_current_active_superuser(
     current_user: user.User = Depends(get_current_user),

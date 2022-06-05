@@ -14,9 +14,9 @@ from app.core.security import get_password_hash
 from app.api import deps
 
 router = APIRouter()
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 1800
 
-@router.post("/login/access-token", response_model=token_schema.Token)
+@router.post("/", response_model=token_schema.Token)
 def login_access_token(
     db: Session = Depends(get_db),
     form_data: OAuth2PasswordRequestForm = Depends()
@@ -35,10 +35,13 @@ def login_access_token(
             user.id, expires_delta=access_token_expires
         ),
         "token_type": "bearer",
+        "id": user.id,
+        "is_superuser": user.is_superuser
+
     }
 
 
-@router.post("login/test-token", response_model=user_schema.User)
+@router.post("/test-token", response_model=user_schema.User)
 def test_token(current_user: user.User = Depends(deps.get_current_user)) -> Any:
     """
     Test access token
