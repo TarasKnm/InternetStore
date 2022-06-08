@@ -27,6 +27,7 @@ class Product(Base):
     name = Column(VARCHAR(45))
     description = Column(VARCHAR(180))
     price = Column(DECIMAL)
+    quantity = Column(Integer,default=0)
     product_category_id = Column(Integer, ForeignKey(ProductCategory.id))
     product_inventory_id = Column(Integer, ForeignKey(ProductInventory.id))
     

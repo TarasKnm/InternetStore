@@ -1,7 +1,9 @@
+from copy import deepcopy
 import os
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
+# from fastapi.responses import FileResponse
 
 from app.db.db_setup import Session, get_db
 from app.crud import crud_images
@@ -20,6 +22,20 @@ def get_all_images(
     
     return images
 
+@router.get('/{id}')
+def get_image_by_id(
+    id,
+    db:Session=Depends(get_db)):
+    image = crud_images.images.get(db=db,id=id)
+    return image
+
+# @router.get('/{id}')
+# def get_image_by_id(
+#     id,
+#     db:Session=Depends(get_db)):
+#     image = crud_images.images.get(db=db,id=id)
+#     return FileResponse(image.image_path)
+
 @router.post('/{name}',description="Takes only jpg images")
 def create_image(
     name,
@@ -33,3 +49,5 @@ def create_image(
     )
     
     image = crud_images.images.create(db=db, obj_in=obj_in)
+    
+

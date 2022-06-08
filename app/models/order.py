@@ -15,7 +15,8 @@ class Order(Base):
     created_at = Column(TIMESTAMP)
     city = Column(VARCHAR(45))
     zip = Column(VARCHAR(45))
-    adress = Column(VARCHAR(45))
+    address = Column(VARCHAR(45))
+    status = Column(VARCHAR(45))
     products = relationship('Product', secondary=order_detail)
     user = relationship('User')
     
